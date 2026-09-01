@@ -1,0 +1,83 @@
+Halo Reviewer,
+
+Berikut submission "Belajar Pengembangan Web Intermediate" - Story App.
+Aplikasi Single-Page Application berbasis vanilla JavaScript + Vite yang
+mengonsumsi Dicoding Story API.
+
+Repositori : https://github.com/arighmt67-bit/story-app
+Demo online: https://arighmt67-bit.github.io/story-app/
+
+CARA MENJALANKAN
+  npm install
+  npm run dev        -> http://localhost:5173
+  npm run build      -> hasil produksi di folder dist/
+
+Akun uji: silakan daftar akun baru lewat menu "Daftar" (bebas, API publik),
+atau pakai akun mana pun milik Reviewer.
+
+-------------------------------------------------------------------
+PEMENUHAN KRITERIA
+-------------------------------------------------------------------
+
+KRITERIA 1 - Menampilkan Data
+- Daftar cerita diambil dari GET /stories (location=1) lalu dirender sebagai
+  kartu berisi gambar, nama, tanggal, deskripsi, dan koordinat.
+- Setiap gambar memiliki teks alternatif yang deskriptif.
+- Tanggal diformat ke Bahasa Indonesia lewat utils/showFormattedDate.
+
+KRITERIA 2 - Menampilkan Peta Digital
+- Peta memakai Leaflet. Seluruh cerita ber-koordinat diberi marker + popup
+  berisi nama, foto, dan cuplikan deskripsi.
+- Tersedia LAYER CONTROL dengan 3 pilihan tile layer:
+  OpenStreetMap, OpenTopoMap (Topografi), dan CARTO Light (Carto Terang).
+- INTERAKSI TAMBAHAN: mengklik (atau menekan Enter pada) sebuah kartu cerita
+  akan menyorot kartu tersebut dan menerbangkan peta ke marker-nya lalu
+  membuka popup - list dan peta saling tersinkron.
+- Tile layer yang dipakai gratis dan tidak memerlukan API key, sehingga tidak
+  ada kunci rahasia yang perlu dicantumkan.
+
+KRITERIA 3 - Menambah Data Baru
+- Form tambah cerita mengirim ke POST /stories dengan multipart/form-data.
+- Foto dapat diambil dari dua jalur: memilih berkas, atau MENGAMBIL GAMBAR
+  LANGSUNG DARI KAMERA melalui getUserMedia + canvas.
+- PENTING: seluruh track media stream DIHENTIKAN (track.stop()) ketika kamera
+  ditutup, foto diambil, maupun saat berpindah halaman - sehingga indikator
+  kamera benar-benar mati dan tidak menyala di belakang layar.
+- Lokasi dipilih dengan mengklik peta; marker dan koordinat langsung tampil.
+- Validasi sisi klien: deskripsi minimal 5 karakter, foto wajib ada, dan
+  ukuran foto dibatasi 1 MB (batas API).
+
+KRITERIA 4 - Aksesibilitas
+- SKIP TO CONTENT: tautan "Lewati ke konten utama" muncul saat difokus dan
+  memindahkan fokus ke <main>.
+- Seluruh input memiliki <label for> yang terhubung.
+- Struktur HTML semantik: header, nav, main, footer, section, article, time.
+- Pesan galat memakai role="alert", status memuat memakai aria-live.
+- Kartu cerita dapat dioperasikan penuh dengan keyboard (tabindex + Enter).
+
+KRITERIA 5 - Transisi Halaman
+- Perpindahan halaman memakai VIEW TRANSITION API (document.startViewTransition)
+  dengan animasi kustom fade + slide pada ::view-transition-old/new.
+- Terdapat fallback bila peramban belum mendukung API tersebut.
+- Animasi otomatis dinonaktifkan bila pengguna mengaktifkan
+  prefers-reduced-motion.
+
+-------------------------------------------------------------------
+ARSITEKTUR MVP
+-------------------------------------------------------------------
+Setiap halaman berdata dipisah menjadi tiga lapis:
+  - Model     : src/scripts/data/api.js (seluruh komunikasi dengan API)
+  - View      : *-page.js  -> HANYA mengurus DOM
+  - Presenter : *-presenter.js -> mengatur alur, TIDAK menyentuh DOM sama sekali
+
+Contoh: home-page.js (View) hanya menyediakan showLoading/showStories/showError,
+sedangkan home-presenter.js yang memutuskan kapan masing-masing dipanggil.
+
+-------------------------------------------------------------------
+RESPONSIVE
+-------------------------------------------------------------------
+Diuji pada 375px, 768px, dan 1024px - tanpa scroll horizontal dan tanpa
+elemen yang saling menimpa. Pada desktop daftar cerita dan peta tampil
+berdampingan, pada mobile menumpuk satu kolom dengan drawer navigasi.
+
+Terima kasih atas waktu dan masukannya.
