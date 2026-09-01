@@ -1,0 +1,12 @@
+APP_URL=https://arighmt67-bit.github.io/story-app/
+API_BASE_URL=https://story-api.dicoding.dev/v1
+MAP_SERVICE_API_KEY=(tidak diperlukan)
+
+Catatan mengenai peta:
+Aplikasi ini memakai Leaflet dengan tile layer gratis yang TIDAK membutuhkan
+API key, yaitu OpenStreetMap, OpenTopoMap, dan CARTO Light. Karena itu tidak
+ada API key yang perlu dicantumkan maupun dirahasiakan.
+
+Akun uji (boleh dipakai reviewer, atau silakan daftar akun baru):
+email    : reviewer.storyapp@dicoding.test
+password : rahasia123
