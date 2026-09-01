@@ -2,6 +2,7 @@ import routes from '../routes/routes';
 import { getActiveRoute } from '../routes/url-parser';
 import { isLoggedIn, getUserName, removeAccessToken } from '../utils/auth';
 import { startViewTransition } from '../utils';
+import { isPushSupported, isSubscribed, subscribe, unsubscribe } from '../utils/push';
 
 class App {
   #content = null;
@@ -15,6 +16,66 @@ class App {
 
     this.#setupDrawer();
     this.#setupSkipToContent();
+    this.#setupOfflineBanner();
+  }
+
+  /** Indikator status koneksi untuk fitur sinkronisasi offline. */
+  #setupOfflineBanner() {
+    const banner = document.getElementById('offline-banner');
+    if (!banner) return;
+
+    const update = () => {
+      banner.hidden = navigator.onLine;
+    };
+
+    window.addEventListener('online', update);
+    window.addEventListener('offline', update);
+    update();
+  }
+
+  /** Tombol toggle langganan push notification. */
+  async #setupPushToggle() {
+    const button = document.getElementById('push-toggle');
+    if (!button) return;
+
+    if (!isPushSupported()) {
+      button.hidden = true;
+      return;
+    }
+
+    const paint = (subscribed) => {
+      button.textContent = subscribed ? 'Matikan Notifikasi' : 'Aktifkan Notifikasi';
+      button.setAttribute('aria-pressed', String(subscribed));
+    };
+
+    let subscribed = false;
+    try {
+      subscribed = await isSubscribed();
+    } catch {
+      subscribed = false;
+    }
+    paint(subscribed);
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      const previous = button.textContent;
+      button.textContent = 'Memproses...';
+
+      try {
+        if (await isSubscribed()) {
+          await unsubscribe();
+          paint(false);
+        } else {
+          await subscribe();
+          paint(true);
+        }
+      } catch (error) {
+        button.textContent = previous;
+        window.alert(error.message);
+      } finally {
+        button.disabled = false;
+      }
+    });
   }
 
   #setupDrawer() {
@@ -63,8 +124,15 @@ class App {
       authNav.innerHTML = `
         <li class="nav-user">Halo, ${name || 'Pengguna'}</li>
         <li><a href="#/add">Tambah Cerita</a></li>
+        <li>
+          <button type="button" id="push-toggle" class="btn-push" aria-pressed="false">
+            Aktifkan Notifikasi
+          </button>
+        </li>
         <li><button type="button" id="logout-button" class="btn-logout">Keluar</button></li>
       `;
+
+      this.#setupPushToggle();
 
       const logoutButton = document.getElementById('logout-button');
       logoutButton.addEventListener('click', () => {

@@ -265,6 +265,21 @@ export default class AddStoryPage {
     el.textContent = message;
   }
 
+  /** Cerita masuk antrean offline. */
+  onQueued() {
+    this.#stopCamera();
+    const el = document.getElementById('add-alert');
+    if (el) {
+      el.hidden = false;
+      el.className = 'alert alert-success';
+      el.textContent =
+        'Anda sedang offline. Cerita disimpan di perangkat dan akan dikirim otomatis saat koneksi kembali.';
+    }
+    setTimeout(() => {
+      location.hash = '#/';
+    }, 2000);
+  }
+
   onSuccess() {
     this.#stopCamera();
     const el = document.getElementById('add-alert');

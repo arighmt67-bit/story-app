@@ -5,7 +5,12 @@ const ENDPOINTS = {
   REGISTER: `${CONFIG.BASE_URL}/register`,
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
+  SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
+
+function authHeader() {
+  return { Authorization: `Bearer ${getAccessToken()}` };
+}
 
 async function parseResponse(response) {
   const json = await response.json();
@@ -35,9 +40,7 @@ export async function login({ email, password }) {
 
 export async function getStories({ page = 1, size = 20, location = 1 } = {}) {
   const url = `${ENDPOINTS.STORIES}?page=${page}&size=${size}&location=${location}`;
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${getAccessToken()}` },
-  });
+  const response = await fetch(url, { headers: authHeader() });
   return parseResponse(response);
 }
 
@@ -50,8 +53,28 @@ export async function addStory({ description, photo, lat, lon }) {
 
   const response = await fetch(ENDPOINTS.STORIES, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${getAccessToken()}` },
+    headers: authHeader(),
     body: formData,
+  });
+  return parseResponse(response);
+}
+
+/* ---------- Web Push ---------- */
+
+export async function subscribePushNotification({ endpoint, keys }) {
+  const response = await fetch(ENDPOINTS.SUBSCRIBE, {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ endpoint, keys }),
+  });
+  return parseResponse(response);
+}
+
+export async function unsubscribePushNotification({ endpoint }) {
+  const response = await fetch(ENDPOINTS.SUBSCRIBE, {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ endpoint }),
   });
   return parseResponse(response);
 }

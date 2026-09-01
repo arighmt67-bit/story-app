@@ -2,6 +2,7 @@ import { getStories } from '../../data/api';
 import { showFormattedDate } from '../../utils';
 import { createMap, L } from '../../utils/map-helper';
 import { isLoggedIn } from '../../utils/auth';
+import { putStory, deleteStory, getAllStories } from '../../data/database';
 import CONFIG from '../../config';
 import HomePresenter from './home-presenter';
 
@@ -110,11 +111,59 @@ export default class HomePage {
                     : 'Lokasi tidak dicantumkan'
                 }
               </p>
+              <button type="button" class="btn btn-save" data-save="${story.id}">
+                Simpan Offline
+              </button>
             </div>
           </article>
         </li>`,
       )
       .join('');
+
+    this.#bindSaveButtons(stories);
+  }
+
+  /** Create & delete IndexedDB langsung dari kartu cerita (kriteria 4). */
+  async #bindSaveButtons(stories) {
+    let savedIds = new Set();
+    try {
+      const saved = await getAllStories();
+      savedIds = new Set(saved.map((item) => item.id));
+    } catch (error) {
+      console.warn('IndexedDB tidak dapat dibaca:', error.message);
+    }
+
+    document.querySelectorAll('[data-save]').forEach((button) => {
+      const id = button.dataset.save;
+      const story = stories.find((item) => item.id === id);
+
+      const paint = (isSaved) => {
+        button.textContent = isSaved ? 'Hapus dari Tersimpan' : 'Simpan Offline';
+        button.classList.toggle('is-saved', isSaved);
+      };
+
+      paint(savedIds.has(id));
+
+      button.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        button.disabled = true;
+        try {
+          if (savedIds.has(id)) {
+            await deleteStory(id);
+            savedIds.delete(id);
+            paint(false);
+          } else {
+            await putStory(story);
+            savedIds.add(id);
+            paint(true);
+          }
+        } catch (error) {
+          this.showError(`Gagal menyimpan ke IndexedDB: ${error.message}`);
+        } finally {
+          button.disabled = false;
+        }
+      });
+    });
   }
 
   showMap(stories) {

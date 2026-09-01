@@ -633,3 +633,83 @@ textarea {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ============ Submission 2: PWA, IndexedDB, Push ============ */
+
+.offline-banner {
+  background-color: #b45309;
+  color: #fff;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+}
+
+.btn-push {
+  background-color: transparent;
+  border: 1px solid currentColor;
+  color: inherit;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.btn-push[aria-pressed='true'] {
+  background-color: #1f6feb;
+  color: #fff;
+  border-color: #1f6feb;
+}
+
+.btn-push:focus-visible,
+.btn-save:focus-visible,
+.btn-danger:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+.btn-save {
+  margin-top: 0.6rem;
+  background-color: #1f6feb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.btn-save.is-saved {
+  background-color: #6b7280;
+}
+
+.btn-danger {
+  margin-top: 0.6rem;
+  background-color: #b91c1c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font: inherit;
+}
+
+@media screen and (max-width: 700px) {
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+}

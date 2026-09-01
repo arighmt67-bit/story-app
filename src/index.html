@@ -8,6 +8,9 @@
       content="Story App - berbagi cerita beserta lokasinya menggunakan Dicoding Story API."
     />
     <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./images/icon-192.png" />
+    <meta name="theme-color" content="#1f6feb" />
     <title>Story App - Berbagi Cerita</title>
 
     <script type="module" src="/scripts/index.js"></script>
@@ -24,6 +27,7 @@
           <ul id="nav-list" class="nav-list">
             <li><a href="#/">Beranda</a></li>
             <li><a href="#/about">Tentang</a></li>
+            <li><a href="#/saved">Tersimpan</a></li>
           </ul>
           <ul id="auth-nav" class="nav-list nav-list-auth"></ul>
         </nav>
@@ -34,6 +38,10 @@
         </button>
       </div>
     </header>
+
+    <div id="offline-banner" class="offline-banner" role="status" aria-live="polite" hidden>
+      Anda sedang offline. Cerita baru akan dikirim otomatis saat koneksi kembali.
+    </div>
 
     <main id="main-content" class="main-content" tabindex="-1"></main>
 

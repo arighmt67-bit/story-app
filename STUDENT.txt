@@ -1,17 +1,9 @@
 APP_URL=https://arighmt67-bit.github.io/story-app/
 API_BASE_URL=https://story-api.dicoding.dev/v1
-MAP_SERVICE_API_KEY=(tidak diperlukan)
+MAP_SERVICE_API_KEY=Tidak diperlukan (menggunakan Leaflet + OpenStreetMap & CARTO tile gratis tanpa API key)
 
-Catatan mengenai peta:
-Aplikasi ini memakai Leaflet dengan tile layer gratis yang TIDAK membutuhkan
-API key, yaitu OpenStreetMap, OpenTopoMap, dan CARTO Light. Karena itu tidak
-ada API key yang perlu dicantumkan maupun dirahasiakan.
-
-Akun uji (sudah diverifikasi dapat login, atau silakan daftar akun baru):
+Akun uji terverifikasi:
 email    : aconk1788235813@test.com
 password : rahasia123
 
-Cara menjalankan secara lokal:
-1. npm install
-2. npm run dev      -> buka URL yang ditampilkan terminal
-   npm run build    -> hasil build produksi ada di folder dist/
+(Reviewer juga dapat mendaftar akun baru langsung melalui menu "Daftar" pada aplikasi)
